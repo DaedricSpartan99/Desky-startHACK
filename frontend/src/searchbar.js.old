@@ -1,0 +1,31 @@
+import { useState } from 'react';
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Search2Icon } from '@chakra-ui/icons'
+
+export default function SearchBar({confirm}) {
+
+  const [input, setInput] = useState('');
+
+  function handleKeyPress(e) {
+    
+     // This is perfectly safe in react, it correctly detect the keys
+    if(e.key == 'Enter'){
+        confirm(input)
+    }
+  }
+
+
+  return (
+    <InputGroup>
+      <InputLeftElement pointerEvents='none'>
+        <Search2Icon color='gray.300' />
+      </InputLeftElement>
+      <Input 
+        value={input}
+        placeholder='Search location, farm or workplace' w='50%' 
+        onChange={(value) => setInput(value)}
+        onKeyDown={handleKeyPress}
+      />
+    </InputGroup>
+  );
+}
