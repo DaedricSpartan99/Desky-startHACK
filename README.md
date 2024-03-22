@@ -22,7 +22,19 @@ Install dependencies:
 
 `pip install -r requirements.txt`
 
-Run the server:
+If pip fails to install the required packages due to a version mismatch, you can install them manually:
+
+```
+pip install django
+pip install djangorestframework
+pip install django-cors-headers
+pip install djangorestframework-simplejwt
+pip install requests
+pip install pandas
+pip install Pillow
+```
+
+### Run the server
 
 `python manage.py runserver`
 
