@@ -24,8 +24,10 @@ def trigger_email_view(request):
         return JsonResponse({"message": "Missing recipient."}, status=400)
 
     recipient = request.data['recipient']
+    latitude = request.data['latitude']
+    longitude = request.data['longitude']
 
-    df = fetch_data()
+    df = fetch_data(int(latitude), int(longitude))
 
     trigger_email_sending(df, recipient)  # Call the function you defined earlier in views.py
     return JsonResponse({"message": "Email has been sent."})
@@ -72,13 +74,13 @@ def send_email(df, subject, body, to_email):
     finally:
         server.quit()
 
-def fetch_data():
+def fetch_data(latitude, longitude):
     # Calculate current date and end date
     current_date = datetime.now().strftime('%Y-%m-%d')
     end_date = (datetime.now() + timedelta(days=14)).strftime('%Y-%m-%d')
 
     # Construct URL with current and end dates
-    url = f"https://services.cehub.syngenta-ais.com/api/Forecast/ShortRangeForecastDaily?format=json&supplier=Meteoblue&startDate={current_date}&endDate={end_date}&measureLabel=TempAir_DailyAvg%20(C);TempAir_DailyMax%20(C);TempAir_DailyMin%20(C);Precip_DailySum%20(mm);WindDirection_DailyAvg%20(Deg);WindSpeed_DailyAvg%20(m/s);HumidityRel_DailyAvg%20(pct);WindDirection_DailyAvg;Soilmoisture_0to10cm_DailyAvg%20(vol%25);WindGust_DailyMax%20(m/s);Referenceevapotranspiration_DailySum%20(mm);TempSurface_DailyAvg%20(C);Soiltemperature_0to10cm_DailyAvg%20(C)&latitude=47&longitude=7"
+    url = f"https://services.cehub.syngenta-ais.com/api/Forecast/ShortRangeForecastDaily?format=json&supplier=Meteoblue&startDate={current_date}&endDate={end_date}&measureLabel=TempAir_DailyAvg%20(C);TempAir_DailyMax%20(C);TempAir_DailyMin%20(C);Precip_DailySum%20(mm);WindDirection_DailyAvg%20(Deg);WindSpeed_DailyAvg%20(m/s);HumidityRel_DailyAvg%20(pct);WindDirection_DailyAvg;Soilmoisture_0to10cm_DailyAvg%20(vol%25);WindGust_DailyMax%20(m/s);Referenceevapotranspiration_DailySum%20(mm);TempSurface_DailyAvg%20(C);Soiltemperature_0to10cm_DailyAvg%20(C)&latitude={latitude}&longitude={longitude}"
 
     payload = {}
     headers = {
