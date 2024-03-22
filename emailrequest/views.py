@@ -6,15 +6,20 @@ from email import encoders
 from django.conf import settings  # To use variables defined in Django's settings.py
 
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
+#from django.views.decorators.http import require_http_methods
+from rest_framework.decorators import api_view
 #from rest_framework.parsers import JSONParser
 
 from  datetime import datetime, timedelta
 import json
 import requests
 import pandas as pd
+from django.views.decorators.csrf import csrf_exempt
 
-@require_http_methods(["POST"])  # Assuming you want the action to be triggered by a POST request
+
+#@require_http_methods(["POST"])  # Assuming you want the action to be triggered by a POST request
+@csrf_exempt
+@api_view(['POST'])
 def trigger_email_view(request):
 
     #data = JSONParser().parse(request)
@@ -26,6 +31,10 @@ def trigger_email_view(request):
     recipient = request.data['recipient']
     latitude = request.data['latitude']
     longitude = request.data['longitude']
+
+    print("Recipient: ", recipient)
+    print("Latitude: ", latitude)
+    print("Longitude: ", longitude)
 
     df = fetch_data(int(latitude), int(longitude))
 
@@ -63,16 +72,22 @@ def send_email(df, subject, body, to_email):
         print(f"Could not open attachment file {filename}.")
         return
 
+
     # Send the email
+    server=None
+
     try:
         server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        #server.ehlo()
         server.starttls()
+        #server.ehlo()
         server.login(from_email, password)
         server.sendmail(from_email, to_email, msg.as_string())
     except smtplib.SMTPException as e:
         print(f"Error sending email: {e}")
     finally:
-        server.quit()
+        if server is not None:
+            server.quit()
 
 def fetch_data(latitude, longitude):
     # Calculate current date and end date

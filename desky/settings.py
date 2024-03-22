@@ -169,3 +169,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     )
 }
+
+# emailrequest
+EMAIL_HOST_USER = "info@desky.digital"
+EMAIL_HOST_PASSWORD = "Fabio<3Nobile"
+EMAIL_HOST = 'smtp.hostinger.com'
+EMAIL_PORT = 465
