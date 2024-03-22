@@ -38,6 +38,10 @@ export default function WorkplaceEntry({property}) {
     convertible = 'Convertible in 2h of work';
   }
 
+  const openInNewTab = url => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
 
 const Div = styled.div`
   display: flex;
@@ -464,9 +468,12 @@ const Div21 = styled.div`
                 <Div18>{convertible}</Div18>
               </Stack>
             </Flex>
+            <Spacer/>
             <Button
-              colorScheme='#AA3267'
+              colorScheme='pink'
+              placement='right'
               size='md'
+              onClick={(event) => { openInNewTab(property.href)}} 
             >
               BOOK
             </Button>
@@ -478,5 +485,5 @@ const Div21 = styled.div`
   );
 }
 
-
+//'AA3267'
 
